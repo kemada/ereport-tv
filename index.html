@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eReport.tv – rozhovory, ktoré vidno</title>
+  <title>ereport.tv – rozhovory, ktoré vidno</title>
   <meta name="description" content="eReport.tv – nezávislé videoreportáže a spravodajstvo zo Slovenska a sveta.">
   <link rel="canonical" href="https://ereport.tv/">
   <meta property="og:type" content="website">
@@ -93,7 +93,9 @@
     .topics h3 { font-size: 1.1rem; margin-bottom: 0.35rem; }
     .topics p { color: var(--muted); font-size: 0.95rem; }
 
-    .videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .videos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem 1.5rem; margin-top: 2rem; }
+    @media (max-width: 900px) { .videos { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .videos { grid-template-columns: 1fr; } }
     .videos a { display: block; text-decoration: none; }
     .videos .thumb { position: relative; aspect-ratio: 16 / 9; background: var(--navy); overflow: hidden; border-radius: 4px; }
     .videos .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -115,21 +117,7 @@
 
     @media (max-width: 640px) {
       .menu { display: none; }
-      .videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-    .videos a { display: block; text-decoration: none; }
-    .videos .thumb { position: relative; aspect-ratio: 16 / 9; background: var(--navy); overflow: hidden; border-radius: 4px; }
-    .videos .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .videos .thumb::after {
-      content: ""; position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; transform: translate(-50%, -50%);
-      border-radius: 50%; background: var(--signal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center/22px no-repeat;
-    }
-    .videos h3 { font-size: 1.05rem; margin-top: 0.75rem; line-height: 1.35; }
-    .videos time { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
-    .videos-fallback { margin-top: 2rem; aspect-ratio: 16 / 9; max-width: 800px; }
-    .videos-fallback iframe { width: 100%; height: 100%; border: 0; border-radius: 4px; }
-    .more { display: inline-block; margin-top: 1.5rem; color: var(--signal); font-weight: 600; }
-
-    .contact dl { grid-template-columns: 1fr; gap: 0.15rem; }
+      .contact dl { grid-template-columns: 1fr; gap: 0.15rem; }
       .contact dt { margin-top: 0.75rem; }
     }
   </style>
@@ -186,6 +174,10 @@
             <p>Prinášame profesionalnu diskusie, ktoré sa zameriavajú na fakty a informacie z prvej ruky. Rozhovory sú určené všetkým, ktori hľadaju kvalitné spravodajstvo a chcú rozumieť súvislostiam, ktoré ovplyvňujú našu sučasnosť. Stretávajú sa u nás odborníci, lídri a osobnosti slovenskej politiky, aby sa vyjadrili k aktuálnym témam.</p>
           </article>
           <article>
+            <h3>Aktuality</h3>
+            <p>Videá z tlačových konferencií, zasadaní parlamentu, dianí v politických stranách či vyjadrenia politikov</p>
+          </article>
+          <article>
             <h3>Investigatíva</h3>
             <p>Dlhšie príbehy, ktoré potrebujú čas, dokumenty a overovanie.</p>
           </article>
@@ -199,7 +191,7 @@
         <p class="lead">Máte tip na reportáž alebo chcete spolupracovať? Ozvite sa.</p>
         <dl>
           <dt>E-mail</dt><dd><a href="mailto:studio@ereport.tv">studio@ereport.tv</a></dd>
-          <dt>Tipy</dt><dd><a href="mailto:studio@ereport.tv">tip@ereport.tv</a></dd>
+          <dt>Tipy</dt><dd><a href="mailto:tip@ereport.tv">tip@ereport.tv</a></dd>
         </dl>
       </div>
     </section>
@@ -214,14 +206,14 @@
   <script>
     document.getElementById('rok').textContent = new Date().getFullYear();
 
-    // Posledné 3 videá z playlistu cez YouTube Data API.
+    // Posledných 6 videí z playlistu cez YouTube Data API.
     // Vlož svoj API kľúč (návod v README). Bez kľúča sa zobrazí vložený playlist.
-    const YT_API_KEY = 'AIzaSyASXdD2VqRO4AXiUaKCpx_12VyyDOD9ai0';
+    const YT_API_KEY = 'AIzaSyDN5on7ut1zDHHbCE3yrCFYOTupr327_Bo';
     const YT_PLAYLIST = 'PLtEOf0zKWsx6Z1nmg2Zf0hyJoaEpYJFk5';
 
     async function nacitajVidea() {
       if (!YT_API_KEY) return;
-      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=3&playlistId=${YT_PLAYLIST}&key=${YT_API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=6&playlistId=${YT_PLAYLIST}&key=${YT_API_KEY}`;
       try {
         const r = await fetch(url);
         if (!r.ok) throw new Error(r.status);
