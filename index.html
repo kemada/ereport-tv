@@ -5,7 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eReport.tv – reportáže, ktoré vidno</title>
   <meta name="description" content="eReport.tv – nezávislé videoreportáže a spravodajstvo zo Slovenska a sveta.">
+  <link rel="canonical" href="https://ereport.tv/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="eReport.tv">
+  <meta property="og:title" content="eReport.tv – reportáže, ktoré vidno">
+  <meta property="og:description" content="Nezávislé videoreportáže a spravodajstvo zo Slovenska a sveta.">
+  <meta property="og:url" content="https://ereport.tv/">
+  <meta property="og:locale" content="sk_SK">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "eReport.tv",
+    "url": "https://ereport.tv/",
+    "email": "redakcia@ereport.tv",
+    "sameAs": ["https://www.youtube.com/channel/UCpM-t0T57ODqg3Z5oOo-x5A"]
+  }
+  </script>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="google-adsense-account" content="ca-pub-5255551319649977">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5255551319649977" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
@@ -73,6 +93,20 @@
     .topics h3 { font-size: 1.1rem; margin-bottom: 0.35rem; }
     .topics p { color: var(--muted); font-size: 0.95rem; }
 
+    .videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .videos a { display: block; text-decoration: none; }
+    .videos .thumb { position: relative; aspect-ratio: 16 / 9; background: var(--navy); overflow: hidden; border-radius: 4px; }
+    .videos .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .videos .thumb::after {
+      content: ""; position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; transform: translate(-50%, -50%);
+      border-radius: 50%; background: var(--signal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center/22px no-repeat;
+    }
+    .videos h3 { font-size: 1.05rem; margin-top: 0.75rem; line-height: 1.35; }
+    .videos time { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+    .videos-fallback { margin-top: 2rem; aspect-ratio: 16 / 9; max-width: 800px; }
+    .videos-fallback iframe { width: 100%; height: 100%; border: 0; border-radius: 4px; }
+    .more { display: inline-block; margin-top: 1.5rem; color: var(--signal); font-weight: 600; }
+
     .contact dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1.5rem; margin-top: 1.5rem; }
     .contact dt { color: var(--muted); }
 
@@ -81,18 +115,31 @@
 
     @media (max-width: 640px) {
       .menu { display: none; }
-      .contact dl { grid-template-columns: 1fr; gap: 0.15rem; }
+      .videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .videos a { display: block; text-decoration: none; }
+    .videos .thumb { position: relative; aspect-ratio: 16 / 9; background: var(--navy); overflow: hidden; border-radius: 4px; }
+    .videos .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .videos .thumb::after {
+      content: ""; position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; transform: translate(-50%, -50%);
+      border-radius: 50%; background: var(--signal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center/22px no-repeat;
+    }
+    .videos h3 { font-size: 1.05rem; margin-top: 0.75rem; line-height: 1.35; }
+    .videos time { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+    .videos-fallback { margin-top: 2rem; aspect-ratio: 16 / 9; max-width: 800px; }
+    .videos-fallback iframe { width: 100%; height: 100%; border: 0; border-radius: 4px; }
+    .more { display: inline-block; margin-top: 1.5rem; color: var(--signal); font-weight: 600; }
+
+    .contact dl { grid-template-columns: 1fr; gap: 0.15rem; }
       .contact dt { margin-top: 0.75rem; }
     }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5255551319649977"
-     crossorigin="anonymous"></script>
 </head>
 <body>
   <header>
     <nav class="wrap">
-      <a class="logo" href="#">EREPORT<span>.TV</span></a>
+      <a class="logo" href="#">eReport<span>.tv</span></a>
       <ul class="menu">
+        <li><a href="#videa">Videá</a></li>
         <li><a href="#o-nas">O nás</a></li>
         <li><a href="#temy">Témy</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
@@ -104,27 +151,43 @@
     <div class="hero">
       <div class="wrap">
         <div class="onair">Vysielame online</div>
-        <h1>Rozhovory, ktoré vidno</h1>
-        <p>EREPORT.TV prináša aktuálne VIDEO spravodajstvo z politiky a spoločnosti, ktoré veľké médiá obchádzajú.</p>
-        <a class="btn" href="#temy">Pozrieť témy</a>
+        <h1>Reportáže, ktoré vidno.</h1>
+        <p>eReport.tv prináša videoreportáže a spravodajstvo z regiónov, ktoré veľké médiá často obchádzajú.</p>
+        <a class="btn" href="#videa">Pozrieť najnovšie videá</a>
       </div>
     </div>
+
+    <section id="videa">
+      <div class="wrap">
+        <h2>Najnovšie videá</h2>
+        <p class="lead">Z relácie Bez cenzúry na našom YouTube kanáli.</p>
+        <div class="videos" id="video-list" hidden></div>
+        <div class="videos-fallback" id="video-fallback">
+          <iframe src="https://www.youtube.com/embed/videoseries?list=PLtEOf0zKWsx6Z1nmg2Zf0hyJoaEpYJFk5" title="Bez cenzúry – playlist" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <a class="more" href="https://www.youtube.com/playlist?list=PLtEOf0zKWsx6Z1nmg2Zf0hyJoaEpYJFk5" target="_blank" rel="noopener">Všetky diely na YouTube</a>
+      </div>
+    </section>
 
     <section id="o-nas">
       <div class="wrap">
         <h2>O nás</h2>
-        <p class="lead">Robíme rozhovory, pýtame sa a natáčame – bez skratiek a bez agentúrnych správ. Každé video je našim produktom, vzniká priamo v teréne alebo štúdiu.</p>
+        <p class="lead">Sme malý tím reportérov a kameramanov. Chodíme na miesto, pýtame sa a natáčame – bez skratiek a bez agentúrnych správ. Každá reportáž vzniká priamo v teréne.</p>
       </div>
     </section>
 
     <section id="temy">
       <div class="wrap">
         <h2>Témy</h2>
-        <p class="lead">Čomu sa venujeme</p>
+        <p class="lead">Čomu sa venujeme.</p>
         <div class="topics">
           <article>
-            <h3>Rozhovory</h3>
-            <p>Prinášame profesionalnu diskusie, ktoré sa zameriavajú na fakty a informacie z prvej ruky. Rozhovory sú určené všetkým, ktori hľadaju kvalitné spravodajstvo a chcú rozumieť súvislostiam, ktoré ovplyvňujú našu sučasnosť. Stretávajú sa u nás odborníci, lídri a osobnosti slovenskej politiky, aby sa vyjadrili k aktuálnym témam.</p>
+            <h3>Región</h3>
+            <p>Život, samospráva a ľudia v mestách a obciach, kde bývame.</p>
+          </article>
+          <article>
+            <h3>Príroda a hory</h3>
+            <p>Reportáže z Tatier a okolia – ochrana prírody, turistika, počasie.</p>
           </article>
           <article>
             <h3>Investigatíva</h3>
@@ -139,7 +202,8 @@
         <h2>Kontakt</h2>
         <p class="lead">Máte tip na reportáž alebo chcete spolupracovať? Ozvite sa.</p>
         <dl>
-          <dt>E-mail</dt><dd><a href="mailto:studio@ereport.tv">studio@ereport.tv</a></dd>
+          <dt>E-mail</dt><dd><a href="mailto:redakcia@ereport.tv">redakcia@ereport.tv</a></dd>
+          <dt>Tipy</dt><dd><a href="mailto:tip@ereport.tv">tip@ereport.tv</a></dd>
         </dl>
       </div>
     </section>
@@ -147,10 +211,46 @@
 
   <footer>
     <div class="wrap">
-      <span>© <span id="rok"></span> EREPORT.TV</span>
+      <span>© <span id="rok"></span> eReport.tv</span>
       <span>Beží na Cloudflare Pages</span>
     </div>
   </footer>
-  <script>document.getElementById('rok').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('rok').textContent = new Date().getFullYear();
+
+    // Posledné 3 videá z playlistu cez YouTube Data API.
+    // Vlož svoj API kľúč (návod v README). Bez kľúča sa zobrazí vložený playlist.
+    const YT_API_KEY = '';
+    const YT_PLAYLIST = 'PLtEOf0zKWsx6Z1nmg2Zf0hyJoaEpYJFk5';
+
+    async function nacitajVidea() {
+      if (!YT_API_KEY) return;
+      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=3&playlistId=${YT_PLAYLIST}&key=${YT_API_KEY}`;
+      try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(r.status);
+        const d = await r.json();
+        const items = (d.items || []).filter(i => i.snippet && i.snippet.resourceId);
+        if (!items.length) return;
+        const list = document.getElementById('video-list');
+        list.innerHTML = items.map(i => {
+          const sn = i.snippet;
+          const id = sn.resourceId.videoId;
+          const th = (sn.thumbnails.maxres || sn.thumbnails.high || sn.thumbnails.medium || sn.thumbnails.default).url;
+          const dt = new Date(sn.publishedAt);
+          return `<a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">
+            <div class="thumb"><img src="${th}" alt="" loading="lazy"></div>
+            <h3>${sn.title.replace(/</g,'&lt;')}</h3>
+            <time datetime="${sn.publishedAt}">${dt.toLocaleDateString('sk-SK')}</time>
+          </a>`;
+        }).join('');
+        list.hidden = false;
+        document.getElementById('video-fallback').hidden = true;
+      } catch (e) {
+        console.warn('YouTube API:', e);
+      }
+    }
+    nacitajVidea();
+  </script>
 </body>
 </html>
