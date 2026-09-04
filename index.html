@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eReport.tv – reportáže, ktoré vidno</title>
+  <meta name="description" content="eReport.tv – nezávislé videoreportáže a spravodajstvo zo Slovenska a sveta.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0F1F3D;
+      --paper: #F7F8FA;
+      --ink: #1A1A1A;
+      --muted: #5C6470;
+      --line: #D9DDE3;
+      --signal: #C8102E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Archivo", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+    .wrap { width: min(1100px, 100% - 3rem); margin-inline: auto; }
+
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { text-decoration: none; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; font-variation-settings: "wdth" 90; }
+    .logo span { color: var(--signal); }
+    .menu { display: flex; gap: 1.75rem; list-style: none; }
+    .menu a { text-decoration: none; color: var(--muted); font-size: 0.95rem; }
+    .menu a:hover { color: var(--ink); }
+
+    .hero { background: var(--navy); color: #fff; padding: clamp(4rem, 10vw, 8rem) 0; }
+    .onair { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; color: #C9D2E3; margin-bottom: 1.5rem; }
+    .onair::before {
+      content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--signal);
+      box-shadow: 0 0 0 0 rgba(200,16,46,.6); animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(200,16,46,0); } 100% { box-shadow: 0 0 0 0 rgba(200,16,46,0); } }
+    @media (prefers-reduced-motion: reduce) { .onair::before { animation: none; } }
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 5.5rem); line-height: 0.98; letter-spacing: -0.035em;
+      font-weight: 800; font-variation-settings: "wdth" 80; max-width: 14ch;
+    }
+    .hero p { margin-top: 1.5rem; max-width: 46ch; font-size: 1.15rem; color: #C9D2E3; }
+    .btn {
+      display: inline-block; margin-top: 2.25rem; padding: 0.9rem 1.5rem;
+      background: var(--signal); color: #fff; text-decoration: none; font-weight: 600;
+      border-radius: 4px;
+    }
+    .btn:hover { background: #a80d26; }
+
+    section { padding: clamp(3rem, 7vw, 5.5rem) 0; }
+    section + section { border-top: 1px solid var(--line); }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.02em; font-weight: 700; font-variation-settings: "wdth" 85; margin-bottom: 1.25rem; }
+    .lead { max-width: 60ch; color: var(--muted); font-size: 1.05rem; }
+
+    .topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 2rem; }
+    .topics article { border-left: 3px solid var(--signal); padding-left: 1rem; }
+    .topics h3 { font-size: 1.1rem; margin-bottom: 0.35rem; }
+    .topics p { color: var(--muted); font-size: 0.95rem; }
+
+    .contact dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1.5rem; margin-top: 1.5rem; }
+    .contact dt { color: var(--muted); }
+
+    footer { border-top: 1px solid var(--line); padding: 1.5rem 0; font-size: 0.85rem; color: var(--muted); }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+
+    @media (max-width: 640px) {
+      .menu { display: none; }
+      .contact dl { grid-template-columns: 1fr; gap: 0.15rem; }
+      .contact dt { margin-top: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap">
+      <a class="logo" href="#">eReport<span>.tv</span></a>
+      <ul class="menu">
+        <li><a href="#o-nas">O nás</a></li>
+        <li><a href="#temy">Témy</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <div class="onair">Vysielame online</div>
+        <h1>Reportáže, ktoré vidno.</h1>
+        <p>eReport.tv prináša videoreportáže a spravodajstvo z regiónov, ktoré veľké médiá často obchádzajú.</p>
+        <a class="btn" href="#temy">Pozrieť témy</a>
+      </div>
+    </div>
+
+    <section id="o-nas">
+      <div class="wrap">
+        <h2>O nás</h2>
+        <p class="lead">Sme malý tím reportérov a kameramanov. Chodíme na miesto, pýtame sa a natáčame – bez skratiek a bez agentúrnych správ. Každá reportáž vzniká priamo v teréne.</p>
+      </div>
+    </section>
+
+    <section id="temy">
+      <div class="wrap">
+        <h2>Témy</h2>
+        <p class="lead">Čomu sa venujeme.</p>
+        <div class="topics">
+          <article>
+            <h3>Región</h3>
+            <p>Život, samospráva a ľudia v mestách a obciach, kde bývame.</p>
+          </article>
+          <article>
+            <h3>Príroda a hory</h3>
+            <p>Reportáže z Tatier a okolia – ochrana prírody, turistika, počasie.</p>
+          </article>
+          <article>
+            <h3>Investigatíva</h3>
+            <p>Dlhšie príbehy, ktoré potrebujú čas, dokumenty a overovanie.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="contact">
+      <div class="wrap">
+        <h2>Kontakt</h2>
+        <p class="lead">Máte tip na reportáž alebo chcete spolupracovať? Ozvite sa.</p>
+        <dl>
+          <dt>E-mail</dt><dd><a href="mailto:redakcia@ereport.tv">redakcia@ereport.tv</a></dd>
+          <dt>Tipy</dt><dd><a href="mailto:tip@ereport.tv">tip@ereport.tv</a></dd>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="rok"></span> eReport.tv</span>
+      <span>Beží na Cloudflare Pages</span>
+    </div>
+  </footer>
+  <script>document.getElementById('rok').textContent = new Date().getFullYear();</script>
+</body>
+</html>
