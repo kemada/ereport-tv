@@ -93,7 +93,18 @@
     .topics h3 { font-size: 1.1rem; margin-bottom: 0.35rem; }
     .topics p { color: var(--muted); font-size: 0.95rem; }
 
-    .videos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem 1.5rem; margin-top: 2rem; }
+    /* Hlavné video – Bez cenzúry */
+    .featured { max-width: 900px; margin: 0 auto 3.5rem; }
+    .featured .label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); margin-bottom: 0.75rem; }
+    .featured .label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--signal); }
+    .featured .player { aspect-ratio: 16 / 9; background: var(--navy); border-radius: 6px; overflow: hidden; box-shadow: 0 12px 32px rgba(15,31,61,.18); }
+    .featured .player iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .featured h3 { font-size: clamp(1.15rem, 2.2vw, 1.5rem); line-height: 1.3; margin-top: 1rem; letter-spacing: -0.01em; }
+    .featured time { display: block; color: var(--muted); font-size: 0.9rem; margin-top: 0.3rem; }
+
+    .subhead { font-size: 1.1rem; font-weight: 700; margin-top: 0.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
+
+    .videos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem 1.5rem; margin-top: 1.5rem; }
     @media (max-width: 900px) { .videos { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) { .videos { grid-template-columns: 1fr; } }
     .videos a { display: block; text-decoration: none; }
@@ -105,7 +116,7 @@
     }
     .videos h3 { font-size: 1.05rem; margin-top: 0.75rem; line-height: 1.35; }
     .videos time { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
-    .videos-fallback { margin-top: 2rem; aspect-ratio: 16 / 9; max-width: 800px; }
+    .videos-fallback { margin-top: 1.5rem; aspect-ratio: 16 / 9; max-width: 800px; }
     .videos-fallback iframe { width: 100%; height: 100%; border: 0; border-radius: 4px; }
     .more { display: inline-block; margin-top: 1.5rem; color: var(--signal); font-weight: 600; }
 
@@ -148,7 +159,19 @@
     <section id="videa">
       <div class="wrap">
         <h2>Najnovšie videá</h2>
-        <p class="lead">Najnovšie videá z EREPORT.TV.</p>
+
+        <!-- Hlavné video: posledný diel Bez cenzúry -->
+        <div class="featured">
+          <div class="label">Bez cenzúry – najnovší diel</div>
+          <div class="player" id="featured-player">
+            <iframe src="https://www.youtube.com/embed/videoseries?list=PLtEOf0zKWsx6Z1nmg2Zf0hyJoaEpYJFk5" title="Bez cenzúry" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <h3 id="featured-title"></h3>
+          <time id="featured-date"></time>
+        </div>
+
+        <!-- Mriežka: 6 najnovších videí z kanála -->
+        <p class="subhead">Ďalšie videá z kanála</p>
         <div class="videos" id="video-list" hidden></div>
         <div class="videos-fallback" id="video-fallback">
           <iframe src="https://www.youtube.com/embed/videoseries?list=UUpM-t0T57ODqg3Z5oOo-x5A" title="Najnovšie videá" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
@@ -206,39 +229,67 @@
   <script>
     document.getElementById('rok').textContent = new Date().getFullYear();
 
-    // Posledných 6 videí z playlistu cez YouTube Data API.
-    // Vlož svoj API kľúč (návod v README). Bez kľúča sa zobrazí vložený playlist.
     const YT_API_KEY = 'AIzaSyDN5on7ut1zDHHbCE3yrCFYOTupr327_Bo';
-    const YT_PLAYLIST = 'UUpM-t0T57ODqg3Z5oOo-x5A';
+    // Playlist relácie Bez cenzúry – hlavné video
+    const YT_FEATURED_PLAYLIST = 'PLtEOf0zKWsx6Z1nmg2Zf0hyJoaEpYJFk5';
+    // 'UU' + ID kanála = všetky nahrané videá kanála, najnovšie prvé – mriežka
+    const YT_CHANNEL_UPLOADS = 'UUpM-t0T57ODqg3Z5oOo-x5A';
 
-    async function nacitajVidea() {
-      if (!YT_API_KEY) return;
-      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=6&playlistId=${YT_PLAYLIST}&key=${YT_API_KEY}`;
+    const esc = t => t.replace(/</g, '&lt;');
+    const datum = iso => new Date(iso).toLocaleDateString('sk-SK');
+
+    async function playlistItems(playlistId, max) {
+      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${max}&playlistId=${playlistId}&key=${YT_API_KEY}`;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      return (d.items || []).filter(i => i.snippet && i.snippet.resourceId && i.snippet.resourceId.videoId);
+    }
+
+    // Hlavné video: najnovší diel Bez cenzúry. Playlist môže byť zoradený
+    // od najstaršieho, preto stiahneme viac položiek a vyberieme najnovšie podľa dátumu.
+    async function nacitajHlavne() {
       try {
-        const r = await fetch(url);
-        if (!r.ok) throw new Error(r.status);
-        const d = await r.json();
-        const items = (d.items || []).filter(i => i.snippet && i.snippet.resourceId);
+        const items = await playlistItems(YT_FEATURED_PLAYLIST, 50);
+        if (!items.length) return;
+        items.sort((a, b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
+        const sn = items[0].snippet;
+        const id = sn.resourceId.videoId;
+        document.getElementById('featured-player').innerHTML =
+          `<iframe src="https://www.youtube.com/embed/${id}?rel=0" title="${esc(sn.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+        document.getElementById('featured-title').textContent = sn.title;
+        const t = document.getElementById('featured-date');
+        t.textContent = datum(sn.publishedAt);
+        t.setAttribute('datetime', sn.publishedAt);
+      } catch (e) {
+        console.warn('YouTube API (hlavné video):', e);
+      }
+    }
+
+    // Mriežka: 6 najnovších videí z kanála
+    async function nacitajVidea() {
+      try {
+        const items = await playlistItems(YT_CHANNEL_UPLOADS, 6);
         if (!items.length) return;
         const list = document.getElementById('video-list');
         list.innerHTML = items.map(i => {
           const sn = i.snippet;
           const id = sn.resourceId.videoId;
           const th = (sn.thumbnails.maxres || sn.thumbnails.high || sn.thumbnails.medium || sn.thumbnails.default).url;
-          const dt = new Date(sn.publishedAt);
           return `<a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">
             <div class="thumb"><img src="${th}" alt="" loading="lazy"></div>
-            <h3>${sn.title.replace(/</g,'&lt;')}</h3>
-            <time datetime="${sn.publishedAt}">${dt.toLocaleDateString('sk-SK')}</time>
+            <h3>${esc(sn.title)}</h3>
+            <time datetime="${sn.publishedAt}">${datum(sn.publishedAt)}</time>
           </a>`;
         }).join('');
         list.hidden = false;
         document.getElementById('video-fallback').hidden = true;
       } catch (e) {
-        console.warn('YouTube API:', e);
+        console.warn('YouTube API (mriežka):', e);
       }
     }
-    nacitajVidea();
+
+    if (YT_API_KEY) { nacitajHlavne(); nacitajVidea(); }
   </script>
 </body>
 </html>
