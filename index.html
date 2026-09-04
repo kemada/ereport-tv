@@ -239,11 +239,15 @@
     const datum = iso => new Date(iso).toLocaleDateString('sk-SK');
 
     async function playlistItems(playlistId, max) {
-      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${max}&playlistId=${playlistId}&key=${YT_API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,status&maxResults=${max}&playlistId=${playlistId}&key=${YT_API_KEY}`;
       const r = await fetch(url);
       if (!r.ok) throw new Error(r.status);
       const d = await r.json();
-      return (d.items || []).filter(i => i.snippet && i.snippet.resourceId && i.snippet.resourceId.videoId);
+      // Iba verejné videá – súkromné a nezaradené sa preskočia.
+      return (d.items || []).filter(i =>
+        i.snippet && i.snippet.resourceId && i.snippet.resourceId.videoId &&
+        i.status && i.status.privacyStatus === 'public'
+      );
     }
 
     // Hlavné video: najnovší diel Bez cenzúry. Playlist môže byť zoradený
@@ -269,7 +273,7 @@
     // Mriežka: 6 najnovších videí z kanála
     async function nacitajVidea() {
       try {
-        const items = await playlistItems(YT_CHANNEL_UPLOADS, 6);
+        const items = (await playlistItems(YT_CHANNEL_UPLOADS, 12)).slice(0, 6);
         if (!items.length) return;
         const list = document.getElementById('video-list');
         list.innerHTML = items.map(i => {
